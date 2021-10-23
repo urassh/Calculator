@@ -45,22 +45,22 @@
                                 </connections>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12345" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X22-F1-dEL">
-                                <rect key="frame" x="0.0" y="402" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="402" width="401" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="aAZ-ol-MIh"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="75"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="2Mh-Eb-BHN" firstAttribute="top" secondItem="X22-F1-dEL" secondAttribute="bottom" id="BBr-xW-9AG"/>
                             <constraint firstItem="2Mh-Eb-BHN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ExY-PD-Lg2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2Mh-Eb-BHN" secondAttribute="bottom" id="ejF-5A-0yD"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="X22-F1-dEL" secondAttribute="trailing" id="kjn-V8-hm3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="X22-F1-dEL" secondAttribute="trailing" constant="13" id="kjn-V8-hm3"/>
                             <constraint firstItem="X22-F1-dEL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="pPe-qF-ku3"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2Mh-Eb-BHN" secondAttribute="trailing" id="q46-Dj-ehv"/>
                         </constraints>
@@ -77,9 +77,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

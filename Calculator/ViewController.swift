@@ -13,20 +13,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var calculatorCollectionView: UICollectionView!
     @IBOutlet weak var calculatorHeightConstraint: NSLayoutConstraint!
     let numbers = [
-        ["1","2","3","4"],
-        ["1","2","3","4"],
-        ["1","2","3","4"],
-        ["1","2","3","4"],
-        ["1","2","3","4"],
+        ["C","%","$","÷"],
+        ["7","8","9","×"],
+        ["4","5","6","-"],
+        ["1","2","3","+"],
+        ["0",".","="],
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         calculatorCollectionView.delegate = self
         calculatorCollectionView.dataSource = self
-        calculatorCollectionView.register(CalculatorViewCell.self, forCellWithReuseIdentifier: "sellId")
+        calculatorCollectionView.register(CalculatorViewCell.self, forCellWithReuseIdentifier: "cellId")
         //collectionViewの高さ調整
         calculatorHeightConstraint.constant = view.frame.width * 1.4
+        calculatorCollectionView.backgroundColor = .clear
+        view.backgroundColor = .black
     }
     
     //ヘッダーの大きさを変更できる。
@@ -62,16 +64,30 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //結びつけたcollectionViewの変数とセルを結びつける。
         let cell = calculatorCollectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! CalculatorViewCell
-        //cell.backgroundColor = .blue
+        cell.numberLabel.text = numbers[indexPath.section][indexPath.row]
         return cell
     }
     
     //セルの中身についてにクラス
     class CalculatorViewCell: UICollectionViewCell {
         
+        let numberLabel: UILabel = {
+            let label = UILabel()
+            label.textColor = .white
+            label.textAlignment = .center
+            label.text = "1"
+            label.font = .boldSystemFont(ofSize: 32)
+            label.backgroundColor = .orange
+            label.clipsToBounds = true
+            return label
+        }()
+        
         override init(frame: CGRect) {
             super.init(frame: frame)
-            backgroundColor = .black
+            addSubview(numberLabel)
+            numberLabel.frame.size = self.frame.size
+            numberLabel.layer.cornerRadius = self.frame.height / 2
+//            backgroundColor = .black
         }
         
         required init?(coder: NSCoder) {
