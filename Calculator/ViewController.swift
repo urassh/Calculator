@@ -28,6 +28,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         //collectionViewの高さ調整
         calculatorHeightConstraint.constant = view.frame.width * 1.4
         calculatorCollectionView.backgroundColor = .clear
+        calculatorCollectionView.contentInset = .init(top: 0, left: 14, bottom: 0, right: 14)
+        
         view.backgroundColor = .black
     }
     
@@ -38,14 +40,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     //セルの大きさ
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //隙間の分も考慮している。
-        let width = (collectionView.frame.width - 3 * 10) / 4
-        return .init(width: width, height: width)
+        
+        var width: CGFloat = 0
+        width = ((collectionView.frame.width - 10) - 14 * 5) / 4
+        let height  = width
+        
+        if indexPath.section == 4 && indexPath.row == 0 {
+            width = width * 2 + 14 + 9
+        }
+        
+        return .init(width: width, height: height)
     }
     
     //セルと隙間の調整
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 14
     }
     
     //セルの縦の数
@@ -65,6 +74,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         //結びつけたcollectionViewの変数とセルを結びつける。
         let cell = calculatorCollectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! CalculatorViewCell
         cell.numberLabel.text = numbers[indexPath.section][indexPath.row]
+        numbers[indexPath.section][indexPath.row].forEach{ (numberString) in
+            if "0"..."9" ~= numberString || numberString.description == "."{
+                cell.numberLabel.backgroundColor = .darkGray
+            } else if numberString == "C" || numberString == "%" || numberString == "$"{
+                cell.numberLabel.backgroundColor = UIColor.init(white: 1, alpha: 0.7)
+                cell.numberLabel.textColor = .black
+            }
+        }
+        
         return cell
     }
     
@@ -75,7 +93,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let label = UILabel()
             label.textColor = .white
             label.textAlignment = .center
-            label.text = "1"
+            label.text = "nil"
             label.font = .boldSystemFont(ofSize: 32)
             label.backgroundColor = .orange
             label.clipsToBounds = true
