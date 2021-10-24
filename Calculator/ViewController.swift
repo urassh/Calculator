@@ -7,11 +7,16 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController {
     
-    @IBOutlet weak var numberLabel: UILabel!
-    @IBOutlet weak var calculatorCollectionView: UICollectionView!
-    @IBOutlet weak var calculatorHeightConstraint: NSLayoutConstraint!
+    enum CalculateStatus {
+        case none, plus, minus, multiplication, division
+    }
+
+    var calculateStatus: CalculateStatus = .none
+    var firstNumber = ""
+    var secoundNumber = ""
+    
     let numbers = [
         ["C","%","$","÷"],
         ["7","8","9","×"],
@@ -19,6 +24,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         ["1","2","3","+"],
         ["0",".","="],
     ]
+    
+    @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak var calculatorCollectionView: UICollectionView!
+    @IBOutlet weak var calculatorHeightConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +41,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         view.backgroundColor = .black
     }
-    
+}
+
+extension ViewController:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     //ヘッダーの大きさを変更できる。
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return .init(width: collectionView.frame.width, height: 10)
@@ -75,8 +86,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell = calculatorCollectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! CalculatorViewCell
         cell.numberLabel.text = numbers[indexPath.section][indexPath.row]
         numbers[indexPath.section][indexPath.row].forEach{ (numberString) in
+            //数字の部分の背景色はdarkGrayに指定する。
             if "0"..."9" ~= numberString || numberString.description == "."{
                 cell.numberLabel.backgroundColor = .darkGray
+            //"C", "%", "$" の部分は明るい灰色にする。
             } else if numberString == "C" || numberString == "%" || numberString == "$"{
                 cell.numberLabel.backgroundColor = UIColor.init(white: 1, alpha: 0.7)
                 cell.numberLabel.textColor = .black
@@ -86,32 +99,95 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
-    //セルの中身についてにクラス
-    class CalculatorViewCell: UICollectionViewCell {
+    //セルがクリックされたときの処理
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let number = numbers[indexPath.section][indexPath.row]
         
-        let numberLabel: UILabel = {
-            let label = UILabel()
-            label.textColor = .white
-            label.textAlignment = .center
-            label.text = "nil"
-            label.font = .boldSystemFont(ofSize: 32)
-            label.backgroundColor = .orange
-            label.clipsToBounds = true
-            return label
-        }()
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            addSubview(numberLabel)
-            numberLabel.frame.size = self.frame.size
-            numberLabel.layer.cornerRadius = self.frame.height / 2
-//            backgroundColor = .black
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
+        switch calculateStatus {
+        case .none:
+            switch number {
+            case "0"..."9":
+                firstNumber += number
+                numberLabel.text = firstNumber
+            case "+":
+                calculateStatus = .plus
+            case "-":
+                calculateStatus = .minus
+            case "×":
+                calculateStatus = .multiplication
+            case "÷":
+                calculateStatus = .division
+            case "C":
+                clear()
+            default:
+                break
+            }
+        case .plus, .minus, .multiplication, .division:
+            switch number {
+            case "0"..."9":
+                secoundNumber += number
+                numberLabel.text = secoundNumber
+            case "=":
+                let firstNum = Double(firstNumber) ?? 0
+                let secoundNum = Double(secoundNumber) ?? 0
+                let result:Double!
+                
+                switch calculateStatus {
+                case .plus:
+                    result = firstNum + secoundNum
+                    numberLabel.text = String(result)
+                case .minus:
+                    result = firstNum - secoundNum
+                    numberLabel.text = String(result)
+                case .multiplication:
+                    result = firstNum * secoundNum
+                    numberLabel.text = String(result)
+                case .division:
+                    result = firstNum / secoundNum
+                    numberLabel.text = String(result)
+                default:
+                    break
+                }
+            case "C":
+                clear()
+            default:
+                break
+            }
         }
     }
+    //"C"クリアボタンが押されたときの処理
+    func clear() {
+        firstNumber = ""
+        secoundNumber = ""
+        numberLabel.text = "0"
+        calculateStatus = .none
+    }
+}
+
+//セルの中身についてにクラス
+class CalculatorViewCell: UICollectionViewCell {
+        
+    let numberLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "nil"
+        label.font = .boldSystemFont(ofSize: 32)
+        label.backgroundColor = .orange
+        label.clipsToBounds = true
+        return label
+    }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(numberLabel)
+        numberLabel.frame.size = self.frame.size
+        numberLabel.layer.cornerRadius = self.frame.height / 2
+        //            backgroundColor = .black
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
