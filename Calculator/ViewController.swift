@@ -4,11 +4,10 @@
 //
 //  Created by 浦山秀斗 on 2021/10/20.
 //
-
 import UIKit
 
 class ViewController: UIViewController {
-    
+
     enum CalculateStatus {
         case none, plus, minus, multiplication, division
     }
@@ -16,7 +15,7 @@ class ViewController: UIViewController {
     var calculateStatus: CalculateStatus = .none
     var firstNumber = ""
     var secoundNumber = ""
-    
+
     let numbers = [
         ["C","%","$","÷"],
         ["7","8","9","×"],
@@ -24,11 +23,11 @@ class ViewController: UIViewController {
         ["1","2","3","+"],
         ["0",".","="],
     ]
-    
+
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var calculatorCollectionView: UICollectionView!
     @IBOutlet weak var calculatorHeightConstraint: NSLayoutConstraint!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         calculatorCollectionView.delegate = self
@@ -38,7 +37,7 @@ class ViewController: UIViewController {
         calculatorHeightConstraint.constant = view.frame.width * 1.4
         calculatorCollectionView.backgroundColor = .clear
         calculatorCollectionView.contentInset = .init(top: 0, left: 14, bottom: 0, right: 14)
-        
+
         view.backgroundColor = .black
     }
 }
@@ -95,20 +94,27 @@ extension ViewController:  UICollectionViewDelegate, UICollectionViewDataSource,
                 cell.numberLabel.textColor = .black
             }
         }
-        
         return cell
     }
-    
+
     //セルがクリックされたときの処理
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let number = numbers[indexPath.section][indexPath.row]
-        
+
         switch calculateStatus {
         case .none:
             switch number {
             case "0"..."9":
                 firstNumber += number
                 numberLabel.text = firstNumber
+                if firstNumber.hasPrefix("0"){
+                    firstNumber = ""
+                }
+            case ".":
+                if !confirmIncludeDecimalPoint(numberString: firstNumber) {
+                    firstNumber += number
+                    numberLabel.text = firstNumber
+                }
             case "+":
                 calculateStatus = .plus
             case "-":
@@ -127,27 +133,45 @@ extension ViewController:  UICollectionViewDelegate, UICollectionViewDataSource,
             case "0"..."9":
                 secoundNumber += number
                 numberLabel.text = secoundNumber
+                if firstNumber.hasPrefix("0"){
+                    firstNumber = ""
+                }
+            case ".":
+                if !confirmIncludeDecimalPoint(numberString: secoundNumber) {
+                    secoundNumber += number
+                    numberLabel.text = secoundNumber
+                }
             case "=":
                 let firstNum = Double(firstNumber) ?? 0
                 let secoundNum = Double(secoundNumber) ?? 0
-                let result:Double!
-                
+                var resultString: String?
+
                 switch calculateStatus {
                 case .plus:
-                    result = firstNum + secoundNum
-                    numberLabel.text = String(result)
+                    resultString = String(firstNum + secoundNum)
+                    numberLabel.text = resultString
                 case .minus:
-                    result = firstNum - secoundNum
-                    numberLabel.text = String(result)
+                    resultString = String(firstNum - secoundNum)
+                    numberLabel.text = resultString
                 case .multiplication:
-                    result = firstNum * secoundNum
-                    numberLabel.text = String(result)
+                    resultString = String(firstNum * secoundNum)
+                    numberLabel.text = resultString
                 case .division:
-                    result = firstNum / secoundNum
-                    numberLabel.text = String(result)
+                    resultString = String(firstNum / secoundNum)
+                    numberLabel.text = resultString
                 default:
                     break
                 }
+                
+                if let result = resultString, result.hasSuffix(".0") {
+                    resultString = result.replacingOccurrences(of: ".0", with: "")
+                }
+                numberLabel.text = resultString
+                firstNumber = ""
+                secoundNumber = ""
+                
+                firstNumber += resultString ?? ""
+                calculateStatus = .none
             case "C":
                 clear()
             default:
@@ -156,17 +180,34 @@ extension ViewController:  UICollectionViewDelegate, UICollectionViewDataSource,
         }
     }
     //"C"クリアボタンが押されたときの処理
-    func clear() {
+    private func clear() {
         firstNumber = ""
         secoundNumber = ""
         numberLabel.text = "0"
         calculateStatus = .none
     }
+    
+    private func confirmIncludeDecimalPoint (numberString: String) -> Bool{
+        if numberString.range(of: ".") !=  nil || numberString.count == 0 {
+            return true
+        } else {
+            return false
+        }
+    }
 }
-
 //セルの中身についてにクラス
 class CalculatorViewCell: UICollectionViewCell {
-        
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                self.numberLabel.alpha = 0.3
+            } else {
+                self.numberLabel.alpha = 1
+            }
+        }
+    }
+
     let numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -177,7 +218,7 @@ class CalculatorViewCell: UICollectionViewCell {
         label.clipsToBounds = true
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(numberLabel)
@@ -185,9 +226,8 @@ class CalculatorViewCell: UICollectionViewCell {
         numberLabel.layer.cornerRadius = self.frame.height / 2
         //            backgroundColor = .black
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
