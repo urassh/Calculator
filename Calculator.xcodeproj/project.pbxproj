@@ -16,6 +16,7 @@
 		10371987272033E8008E7F72 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10371986272033E8008E7F72 /* CalculatorTests.swift */; };
 		10371991272033E8008E7F72 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10371990272033E8008E7F72 /* CalculatorUITests.swift */; };
 		10371993272033E8008E7F72 /* CalculatorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10371992272033E8008E7F72 /* CalculatorUITestsLaunchTests.swift */; };
+		105407EC272956D900BE51D5 /* CalculatorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105407EB272956D900BE51D5 /* CalculatorViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		1037198C272033E8008E7F72 /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10371990272033E8008E7F72 /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
 		10371992272033E8008E7F72 /* CalculatorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		105407EB272956D900BE51D5 /* CalculatorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				1037196F272033E5008E7F72 /* AppDelegate.swift */,
 				10371971272033E5008E7F72 /* SceneDelegate.swift */,
 				10371973272033E5008E7F72 /* ViewController.swift */,
+				105407EB272956D900BE51D5 /* CalculatorViewCell.swift */,
 				10371975272033E5008E7F72 /* Main.storyboard */,
 				10371978272033E8008E7F72 /* Assets.xcassets */,
 				1037197A272033E8008E7F72 /* LaunchScreen.storyboard */,
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				105407EC272956D900BE51D5 /* CalculatorViewCell.swift in Sources */,
 				10371974272033E5008E7F72 /* ViewController.swift in Sources */,
 				10371970272033E5008E7F72 /* AppDelegate.swift in Sources */,
 				10371972272033E5008E7F72 /* SceneDelegate.swift in Sources */,
